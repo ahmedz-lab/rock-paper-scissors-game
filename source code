@@ -1,88 +1,97 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+
 using namespace std;
 
 class RockPaperScissors {
-public:
-    int userChoice;
-    int computerChoice;
-    int userScore;
-    int computerScore;
+private:
+    int userChoice, computerChoice;
+    int userScore, computerScore;
+    char playAgain;
 
+public:
     RockPaperScissors() {
         userScore = 0;
         computerScore = 0;
     }
 
-    void getInput() {
-        cout << "\n1 = Rock" << endl;
-        cout << "2 = Paper" << endl;
-        cout << "3 = Scissors" << endl;
-        cout << "Your Choice: ";
-        cin >> userChoice;
+    void showMenu() {
+        cout << "\n=================================\n";
+        cout << "     ROCK PAPER SCISSORS GAME\n";
+        cout << "=================================\n";
+        cout << "1. Rock\n";
+        cout << "2. Paper\n";
+        cout << "3. Scissors\n";
+        cout << "Enter your choice (1-3): ";
     }
 
-    void generateComputer() {
-        computerChoice = (rand() % 3) + 1;
-    }
-
-    string getName(int choice) {
-        if (choice == 1) return "Rock";
-        if (choice == 2) return "Paper";
-        return "Scissors";
-    }
-
-    void checkResult() {
-        cout << "\nYou chose: " << getName(userChoice) << endl;
-        cout << "Computer chose: " << getName(computerChoice) << endl;
-
-        if (userChoice == computerChoice) {
-            cout << "Result: Draw!" << endl;
-        }
-        else if ((userChoice == 1 && computerChoice == 3) ||
-                 (userChoice == 2 && computerChoice == 1) ||
-                 (userChoice == 3 && computerChoice == 2)) {
-            cout << "Result: You Win!" << endl;
-            userScore++;
-        }
-        else {
-            cout << "Result: Computer Wins!" << endl;
-            computerScore++;
-        }
-    }
-
-    void showScore() {
-        cout << "\nYour Score: " << userScore << endl;
-        cout << "Computer Score: " << computerScore << endl;
+    string getChoiceName(int choice) {
+        if (choice == 1)
+            return "Rock";
+        else if (choice == 2)
+            return "Paper";
+        else
+            return "Scissors";
     }
 
     void playGame() {
-        int rounds;
-        cout << "How many rounds? ";
-        cin >> rounds;
+        srand(time(0));
 
-        for (int i = 1; i <= rounds; i++) {
-            cout << "\n----- Round " << i << " -----";
-            getInput();
-            generateComputer();
-            checkResult();
-            showScore();
-        }
+        do {
+            showMenu();
+            cin >> userChoice;
 
-        cout << "\n====== FINAL RESULT ======" << endl;
+            while (userChoice < 1 || userChoice > 3) {
+                cout << "Invalid choice! Please enter again (1-3): ";
+                cin >> userChoice;
+            }
+
+            computerChoice = rand() % 3 + 1;
+
+            cout << "\nYou chose: " << getChoiceName(userChoice) << endl;
+            cout << "Computer chose: " << getChoiceName(computerChoice) << endl;
+
+            if (userChoice == computerChoice) {
+                cout << "Result: Match Draw!\n";
+            }
+            else if ((userChoice == 1 && computerChoice == 3) ||
+                     (userChoice == 2 && computerChoice == 1) ||
+                     (userChoice == 3 && computerChoice == 2)) {
+
+                cout << "Result: You Win!\n";
+                userScore++;
+            }
+            else {
+                cout << "Result: Computer Wins!\n";
+                computerScore++;
+            }
+
+            cout << "\nCurrent Score\n";
+            cout << "You: " << userScore << endl;
+            cout << "Computer: " << computerScore << endl;
+
+            cout << "\nDo you want to play again? (y/n): ";
+            cin >> playAgain;
+
+        } while (playAgain == 'y' || playAgain == 'Y');
+
+        cout << "\n=================================\n";
+        cout << "         FINAL SCORE\n";
+        cout << "=================================\n";
+        cout << "You: " << userScore << endl;
+        cout << "Computer: " << computerScore << endl;
+
         if (userScore > computerScore)
-            cout << "YOU WIN THE GAME!" << endl;
+            cout << "Congratulations! You are the overall winner!\n";
         else if (computerScore > userScore)
-            cout << "COMPUTER WINS THE GAME!" << endl;
+            cout << "Computer is the overall winner!\n";
         else
-            cout << "IT'S A DRAW!" << endl;
+            cout << "The game ended in a draw!\n";
     }
 };
 
 int main() {
-    srand(time(0));
-
     RockPaperScissors game;
     game.playGame();
 
